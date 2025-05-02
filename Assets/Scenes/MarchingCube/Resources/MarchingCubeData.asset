@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46a089afdf2c1449b26c76969c65ebf, type: 3}
+  m_Name: MarchingCubeData
+  m_EditorClassIdentifier: 
+  LookupTable:
+  - {fileID: 6466643514019822151, guid: bdfd99d6bfd39514fa3b1d9702eaf4a1, type: 3}
+  - {fileID: 5830897839694985778, guid: f14290634af148c4dbb7805302abc976, type: 3}
+  - {fileID: 5830897839694985778, guid: 971f49c26f5b1af4983d7ec064e27d7d, type: 3}
+  - {fileID: 5830897839694985778, guid: cd0c24e120137ed49bd54bac67641a61, type: 3}
+  - {fileID: 5830897839694985778, guid: df0d9dc919a90134a990e86c775c0cc9, type: 3}
+  - {fileID: 5830897839694985778, guid: 16106fbb233a8bd409a75737b5018d92, type: 3}
+  - {fileID: 5830897839694985778, guid: 7ea8b2911ca41354b8817dbe4ad749fe, type: 3}
+  - {fileID: 5830897839694985778, guid: 6a939dd08262e9c408ea04e73e2b5f02, type: 3}
+  - {fileID: 5830897839694985778, guid: 1d3bfd9c8669e774b93cbcb0161c91de, type: 3}
+  - {fileID: 5830897839694985778, guid: 47010c1d816f50543ad17755579966cb, type: 3}
+  - {fileID: 5830897839694985778, guid: 5a73d8cf85199f64e9d28bd6599b1dfc, type: 3}
+  - {fileID: 5830897839694985778, guid: 6268cfb97b6803e49a08c2400a05eaa3, type: 3}
+  - {fileID: 5830897839694985778, guid: 0d17165d7529ca7428b49b18937a3a52, type: 3}
+  - {fileID: 5830897839694985778, guid: 3527cb9ef44a68d4c86790c03abc9f4d, type: 3}
+  - {fileID: 5830897839694985778, guid: d57d28960c4e96940969f8232a59293f, type: 3}
+  - {fileID: 6466643514019822151, guid: 5f07a52094186d5448c0364d4b8196ef, type: 3}
+  EdgePositionsList: []
