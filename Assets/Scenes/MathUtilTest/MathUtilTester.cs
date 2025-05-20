@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class MathUtilTester : MonoBehaviour
 {
-    [SerializeField] public List<Transform> polygonPoints;
+    [SerializeField] private TestBuildingPositionData positionData;
+    [SerializeField] public GameObject polygonPrefab;
     [SerializeField] public LineRenderer lineRenderer;
     [SerializeField] public float shrinkDistance;
     
@@ -15,9 +16,11 @@ public class MathUtilTester : MonoBehaviour
 
     private void Start()
     {
-        foreach (var polygonPoint in polygonPoints)
+        foreach (var polygonPoint in positionData.Positions)
         {
-            polygonPointPositions.Add(polygonPoint.position);
+            var positionInstance = Instantiate(polygonPrefab);
+            positionInstance.transform.position = polygonPoint;
+            polygonPointPositions.Add(polygonPoint);
         }
         
         TestUtil.CreateWireframePolygonObject(lineRenderer, polygonPointPositions);
