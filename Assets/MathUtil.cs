@@ -434,7 +434,6 @@ public class PolygonSplit
     {
         var results = new List<Vector3>();
         var shrinkPoints = new List<Vector3>();
-        var finalShrinkPoints = new List<Vector3>();
         var bisectorDirections = new List<Vector3>();
         var distanceParents = new List<float>();
 
@@ -485,7 +484,8 @@ public class PolygonSplit
                 prevShrinkPoint = MathUtil.GetCrossPoint(prevPolygonPoint, prevShrinkPoint, polygonPoints[j],
                     shrinkPoints[j]);
 
-                float distanceToLine = Vector3.Distance(prevShrinkPoint, polygonPoints[i]);
+                Vector3 prevPosition = polygonPoints[i - 1 < 0 ? shrinkPoints.Count - 1 : i - 1]; 
+                float distanceToLine = MathUtil.GetLineToPositionDistance(polygonPoints[i], prevPosition, prevShrinkPoint);
 
                 if (distanceToLine < minShrinkDistance)
                 {
