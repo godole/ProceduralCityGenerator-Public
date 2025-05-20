@@ -432,7 +432,11 @@ public class PolygonSplit
 
     public static List<Vector3> GetShrinkPolygon(List<Vector3> polygonPoints, float distance)
     {
-        var shrinkPolygon = new List<Vector3>();
+        var results = new List<Vector3>();
+        var shrinkPoints = new List<Vector3>();
+        var finalShrinkPoints = new List<Vector3>();
+        var bisectorDirections = new List<Vector3>();
+        var distanceParents = new List<float>();
 
         for (int i = 0; i < polygonPoints.Count; i++)
         {
@@ -458,11 +462,59 @@ public class PolygonSplit
                 dist = distance / distParent;    
             }
             
+            bisectorDirections.Add(bisectorDirection);
+            distanceParents.Add(distParent);
+            shrinkPoints.Add(currentPosition + bisectorDirection * dist);
+        }
+        
+        int minShrinkPointIndex = -1;
+        Vector3 minShrinkPoint = Vector3.zero;
+        float minShrinkDistance = float.MaxValue;
 
-            shrinkPolygon.Add(currentPosition + bisectorDirection * dist);
+        for (int i = 0; i < shrinkPoints.Count; i++)
+        {
+            Vector3 prevPolygonPoint = polygonPoints[i];
+            Vector3 prevShrinkPoint = shrinkPoints[i];
+            int nextPosition = -1;
+            
+            for (int j = i + 1; j < shrinkPoints.Count; j++)
+            {
+                if (!MathUtil.IsCrossLine(prevPolygonPoint, prevShrinkPoint, polygonPoints[j],
+                        shrinkPoints[j])) continue;
+                nextPosition = j;
+                prevShrinkPoint = MathUtil.GetCrossPoint(prevPolygonPoint, prevShrinkPoint, polygonPoints[j],
+                    shrinkPoints[j]);
+
+                float distanceToLine = Vector3.Distance(prevShrinkPoint, polygonPoints[i]);
+
+                if (distanceToLine < minShrinkDistance)
+                {
+                    minShrinkDistance = distanceToLine;
+                    minShrinkPointIndex = i;
+                    minShrinkPoint = prevShrinkPoint;
+                }
+            }
+
+            if (nextPosition != -1)
+            {
+                i = nextPosition;
+            }
         }
 
-        return shrinkPolygon;
+        for (int i = 0; i < shrinkPoints.Count; i++)
+        {
+            if (i == minShrinkPointIndex)
+            {
+                results.Add(minShrinkPoint);
+                i++;
+            }
+            else
+            {
+                results.Add(polygonPoints[i] + bisectorDirections[i] * (minShrinkDistance / distanceParents[i]));
+            }
+        }
+
+        return results;
     }
 }
 

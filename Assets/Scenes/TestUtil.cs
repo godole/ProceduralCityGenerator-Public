@@ -6,7 +6,17 @@ namespace Scenes
 {
     public class TestUtil
     {
-        public static GameObject CreatePolygonObject(Material renderMaterial, List<Vector3> polygonPoints)
+        public static GameObject CreateWireframePolygonObject(LineRenderer lineRenderer, List<Vector3> points)
+        {
+            var pointInstance = new List<Vector3>(points);
+            var lineRendererInstance = Object.Instantiate(lineRenderer.gameObject);
+            var lineRendererComponent = lineRendererInstance.GetComponent<LineRenderer>();
+            pointInstance.Add(pointInstance[0]);
+            lineRendererComponent.positionCount = pointInstance.Count;
+            lineRendererComponent.SetPositions(pointInstance.ToArray());
+            return lineRendererInstance;
+        }
+        public static GameObject CreateSolidPolygonObject(Material renderMaterial, List<Vector3> polygonPoints)
         {
             var removeTriangles = new List<Triangle>();
             var mesh = new Mesh();
