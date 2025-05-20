@@ -1,14 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Scenes;
 using UnityEngine;
-using UnityEngine.Experimental.AI;
-using UnityEngine.Networking;
 using UnityEngine.Serialization;
-using Random = System.Random;
 
 public class TensorFieldVisualizer : MonoBehaviour
 {
