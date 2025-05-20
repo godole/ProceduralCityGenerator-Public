@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Scenes;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -178,16 +179,55 @@ public class TensorFieldVisualizer : MonoBehaviour
             groupParentObject = new GameObject(groupName);
         }
 
+        // if (groupName.Equals("113"))
+        // {
+        //     var results = CreateBuildingPoints(subDivisionPoints);
+        //
+        //     var fixedPoints = new List<Vector3>();
+        //     var currentPolygon = results[0];
+        //
+        //     for (int i = 0; i < currentPolygon.Count; i++)
+        //     {
+        //         Vector3 prevPoint = currentPolygon[i - 1 < 0 ? currentPolygon.Count - 1 : i - 1];
+        //
+        //         if (Vector3.Distance(currentPolygon[i], prevPoint) < 3.0f)
+        //         {
+        //             continue;
+        //         }
+        //         
+        //         fixedPoints.Add(currentPolygon[i]);
+        //     }
+        //
+        //     TestUtil.CreateSolidPolygonObject(_buildingMaterials[0], fixedPoints);
+        //
+        //     var testAsset = ScriptableObject.CreateInstance<TestBuildingPositionData>();
+        //     testAsset.Positions = new List<Vector3>(fixedPoints);
+        //     AssetDatabase.CreateAsset(testAsset, "Assets/TestBuildingPositionData.asset");
+        //     AssetDatabase.SaveAssets();
+        // }
         
+        // return;
+        //
         var results = CreateBuildingPoints(subDivisionPoints);
-
+        
         for(var i = 0; i < results.Count; i++, buildingIndex++)
         {
-            if (buildingIndex.Equals(724))
+            var fixedPoints = new List<Vector3>();
+            var currentPolygon = results[i];
+
+            for (int j = 0; j < currentPolygon.Count; j++)
             {
-                Debug.Log("Here");
+                Vector3 prevPoint = currentPolygon[j - 1 < 0 ? currentPolygon.Count - 1 : j - 1];
+
+                if (Vector3.Distance(currentPolygon[j], prevPoint) < 3.0f)
+                {
+                    continue;
+                }
+                
+                fixedPoints.Add(currentPolygon[j]);
             }
-            var shrinkPolygon = PolygonSplit.GetShrinkPolygon(results[i], 5f);
+            
+            var shrinkPolygon = PolygonSplit.GetShrinkPolygon(fixedPoints, 5f);
             var buildingObject = TestUtil.CreateBuildingObject(_buildingMaterials[i % _buildingMaterials.Count], shrinkPolygon, UnityEngine.Random.Range(10.0f, 70.0f));
             if (!string.IsNullOrEmpty(groupName))
             {
