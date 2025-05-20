@@ -432,6 +432,11 @@ public class PolygonSplit
 
     public static List<Vector3> GetShrinkPolygon(List<Vector3> polygonPoints, float distance)
     {
+        if (Math.Abs(distance) <= 0.00001f)
+        {
+            return polygonPoints;
+        }
+        
         var results = new List<Vector3>();
         var shrinkPoints = new List<Vector3>();
         var bisectorDirections = new List<Vector3>();
@@ -501,20 +506,25 @@ public class PolygonSplit
             }
         }
 
-        for (int i = 0; i < shrinkPoints.Count; i++)
+        if (minShrinkPointIndex != -1)
         {
-            if (i == minShrinkPointIndex)
+            for (int i = 0; i < shrinkPoints.Count; i++)
             {
-                results.Add(minShrinkPoint);
-                i++;
+                if (i == minShrinkPointIndex)
+                {
+                    results.Add(minShrinkPoint);
+                    i++;
+                }
+                else
+                {
+                    results.Add(polygonPoints[i] + bisectorDirections[i] * (minShrinkDistance / distanceParents[i]));
+                }
             }
-            else
-            {
-                results.Add(polygonPoints[i] + bisectorDirections[i] * (minShrinkDistance / distanceParents[i]));
-            }
-        }
 
-        return results;
+            return GetShrinkPolygon(results, distance - minShrinkDistance);
+        }
+        
+        return shrinkPoints;
     }
 }
 

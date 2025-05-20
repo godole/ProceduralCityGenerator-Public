@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -413,7 +413,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 286451279}
   m_LocalRotation: {x: 0.7071064, y: -0.0000005289913, z: 0.0000004803297, w: 0.7071072}
-  m_LocalPosition: {x: 0.8767283, y: 26.90841, z: 6.27485}
+  m_LocalPosition: {x: -1.2678792, y: 11.976793, z: 5.0865297}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -586,7 +586,7 @@ MonoBehaviour:
   - {fileID: 1879985616}
   - {fileID: 171146359}
   lineRenderer: {fileID: 1214471204}
-  shrinkDistance: 3
+  shrinkDistance: 1
 --- !u!4 &420030314
 Transform:
   m_ObjectHideFlags: 0
@@ -758,8 +758,8 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 1, y: 0, z: 1}
+  - {x: 100, y: 0, z: 100}
+  - {x: 101, y: 0, z: 101}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1

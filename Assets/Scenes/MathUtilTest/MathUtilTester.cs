@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Scenes;
 using UnityEngine;
@@ -9,7 +10,8 @@ public class MathUtilTester : MonoBehaviour
     [SerializeField] public float shrinkDistance;
     
     private List<Vector3> polygonPointPositions = new List<Vector3>();
-    
+
+    private LineRenderer existLineRendererInstance;
 
     private void Start()
     {
@@ -19,6 +21,21 @@ public class MathUtilTester : MonoBehaviour
         }
         
         TestUtil.CreateWireframePolygonObject(lineRenderer, polygonPointPositions);
-        TestUtil.CreateWireframePolygonObject(lineRenderer, PolygonSplit.GetShrinkPolygon(polygonPointPositions, shrinkDistance));
+        var testInstanceObject = TestUtil.CreateWireframePolygonObject(lineRenderer, PolygonSplit.GetShrinkPolygon(polygonPointPositions, shrinkDistance));
+        existLineRendererInstance = testInstanceObject.GetComponent<LineRenderer>();
+    }
+
+    private void OnValidate()
+    {
+        if (existLineRendererInstance == null)
+        {
+            return;
+        }
+        
+        var shrinkPolygon = PolygonSplit.GetShrinkPolygon(polygonPointPositions, shrinkDistance);
+        shrinkPolygon.Add(shrinkPolygon[0]);
+
+        existLineRendererInstance.positionCount = shrinkPolygon.Count;
+        existLineRendererInstance.SetPositions(shrinkPolygon.ToArray());
     }
 }
