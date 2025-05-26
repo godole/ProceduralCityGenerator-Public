@@ -3,7 +3,7 @@ using System.Linq;
 using CityGenerator;
 using UnityEngine;
 
-namespace Utilty
+namespace Utility
 {
     public class VertexField
     {

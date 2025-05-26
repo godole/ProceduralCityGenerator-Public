@@ -1,17 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-[CreateAssetMenu(menuName = "PRG/MarchingCubeData", fileName = "MarchingCubeData")]
-public class MarchingCubeData : ScriptableObject
+namespace Utility.MarchingCube
 {
-    [System.Serializable]
-    public class EdgePositions
+    [CreateAssetMenu(menuName = "PRG/MarchingCubeData", fileName = "MarchingCubeData")]
+    public class MarchingCubeData : ScriptableObject
     {
-        public List<Vector3> Positions;
-    }
+        [System.Serializable]
+        public class EdgePositions
+        {
+            public List<Vector3> Positions;
+        }
     
-    public List<GameObject> LookupTable;
-    public List<EdgePositions> EdgePositionsList;
+        public List<GameObject> LookupTable;
+        public List<EdgePositions> EdgePositionsList;
+    }
 }

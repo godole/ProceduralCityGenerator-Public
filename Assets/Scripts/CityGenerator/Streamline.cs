@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Utility;
-using Utilty;
 
 namespace CityGenerator
 {

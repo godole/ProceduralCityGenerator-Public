@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace WaveFunctionCollapse
+namespace Utility.WaveFunctionCollapse
 {
     [CreateAssetMenu(fileName = "WfcInputData", menuName = "WaveFunctionCollapse/WfcInputData")]
     public class WfcInputData : ScriptableObject

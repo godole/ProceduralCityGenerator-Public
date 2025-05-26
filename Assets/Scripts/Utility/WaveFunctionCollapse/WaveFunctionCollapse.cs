@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace WaveFunctionCollapse
+namespace Utility.WaveFunctionCollapse
 {
     public class Cell
     {
@@ -74,7 +74,7 @@ namespace WaveFunctionCollapse
 
     public class PropagateData
     {
-        public Pattern.Direction Dir;
+        public Pattern.eDirection Dir;
         public Vector2Int PropagatePosition;
         public Cell PreviousCell;
     }
@@ -183,22 +183,22 @@ namespace WaveFunctionCollapse
         {
             _willPropagate.Add(new PropagateData()
             {
-                Dir = Pattern.Direction.Up, PropagatePosition = previousCell.Position + Vector2Int.up,
+                Dir = Pattern.eDirection.eUp, PropagatePosition = previousCell.Position + Vector2Int.up,
                 PreviousCell = previousCell
             });
             _willPropagate.Add(new PropagateData()
             {
-                Dir = Pattern.Direction.Down, PropagatePosition = previousCell.Position + Vector2Int.down,
+                Dir = Pattern.eDirection.eDown, PropagatePosition = previousCell.Position + Vector2Int.down,
                 PreviousCell = previousCell
             });
             _willPropagate.Add(new PropagateData()
             {
-                Dir = Pattern.Direction.Left, PropagatePosition = previousCell.Position + Vector2Int.left,
+                Dir = Pattern.eDirection.eLeft, PropagatePosition = previousCell.Position + Vector2Int.left,
                 PreviousCell = previousCell
             });
             _willPropagate.Add(new PropagateData()
             {
-                Dir = Pattern.Direction.Right, PropagatePosition = previousCell.Position + Vector2Int.right,
+                Dir = Pattern.eDirection.eRight, PropagatePosition = previousCell.Position + Vector2Int.right,
                 PreviousCell = previousCell
             });
         }

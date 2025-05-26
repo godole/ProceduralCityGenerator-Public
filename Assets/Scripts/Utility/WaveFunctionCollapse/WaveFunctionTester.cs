@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace WaveFunctionCollapse
+namespace Utility.WaveFunctionCollapse
 {
     public class WaveFunctionTester : MonoBehaviour
     {
@@ -17,7 +17,7 @@ namespace WaveFunctionCollapse
         
         private GameObject _viewerParent;
         private PatternManager _patternManager;
-        private WaveFunctionCollapse _waveFunctionCollapse;
+        private Utility.WaveFunctionCollapse.WaveFunctionCollapse _waveFunctionCollapse;
     
         private void Start()
         {
@@ -37,7 +37,7 @@ namespace WaveFunctionCollapse
     
             _patternManager.ReadPattern(inputPixels, inputData.SamplingSize, inputData.UseFreeRotate);
     
-            _waveFunctionCollapse = new WaveFunctionCollapse(_patternManager, _outputSize, _patternManager.GetAllPatterns().Count);
+            _waveFunctionCollapse = new Utility.WaveFunctionCollapse.WaveFunctionCollapse(_patternManager, _outputSize, _patternManager.GetAllPatterns().Count);
             
             StartCoroutine(PropagateStep());
         }

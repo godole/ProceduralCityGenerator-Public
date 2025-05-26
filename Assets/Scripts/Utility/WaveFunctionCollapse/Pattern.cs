@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace WaveFunctionCollapse
+namespace Utility.WaveFunctionCollapse
 {
     public class Pattern
     {
-        public enum Direction
+        public enum eDirection
         {
-            Up,
-            Down,
-            Left,
-            Right
+            eUp,
+            eDown,
+            eLeft,
+            eRight
         }
 
         public int Index;
@@ -21,7 +21,7 @@ namespace WaveFunctionCollapse
         public float Frequency = 1.0f;
         private float _relativeFrequency;
         public float RelativeFrequencyLog;
-        public readonly Dictionary<Direction, List<int>> NeighbourList = new();
+        public readonly Dictionary<eDirection, List<int>> NeighbourList = new();
 
         public static float TotalFrequency;
         public static float TotalFrequencyLog;
@@ -108,7 +108,7 @@ namespace WaveFunctionCollapse
         {
             _grid = grid;
 
-            foreach (Direction dir in Enum.GetValues(typeof(Direction)))
+            foreach (eDirection dir in Enum.GetValues(typeof(eDirection)))
             {
                 NeighbourList[dir] = new List<int>();
             }
@@ -131,7 +131,7 @@ namespace WaveFunctionCollapse
             }
         }
 
-        private bool GetEqualsAnother(Direction dir, Pattern another)
+        private bool GetEqualsAnother(eDirection dir, Pattern another)
         {
             int[,] mySideGrid = GetSideGrid(dir);
             int[,] anotherSideGrid = another.GetSideGrid(GetOpponent(dir));
@@ -150,9 +150,9 @@ namespace WaveFunctionCollapse
             return true;
         }
 
-        private int[,] GetSideGrid(Direction dir)
+        private int[,] GetSideGrid(eDirection dir)
         {
-            int[,] sideGrid = dir is Direction.Up or Direction.Down ? new int[Size, Size - 1] : new int[Size - 1, Size];
+            int[,] sideGrid = dir is eDirection.eUp or eDirection.eDown ? new int[Size, Size - 1] : new int[Size - 1, Size];
 
             int minX;
             int maxX;
@@ -161,25 +161,25 @@ namespace WaveFunctionCollapse
 
             switch (dir)
             {
-                case Direction.Up:
+                case eDirection.eUp:
                     minX = 0;
                     maxX = Size;
                     minY = 1;
                     maxY = Size;
                     break;
-                case Direction.Down:
+                case eDirection.eDown:
                     minX = 0;
                     maxX = Size;
                     minY = 0;
                     maxY = Size - 1;
                     break;
-                case Direction.Left:
+                case eDirection.eLeft:
                     minX = 0;
                     maxX = Size - 1;
                     minY = 0;
                     maxY = Size;
                     break;
-                case Direction.Right:
+                case eDirection.eRight:
                     minX = 1;
                     maxX = Size;
                     minY = 0;
@@ -200,15 +200,15 @@ namespace WaveFunctionCollapse
             return sideGrid;
         }
 
-        public static Direction GetOpponent(Direction dir)
+        public static eDirection GetOpponent(eDirection dir)
         {
-            Direction opponent = dir switch
+            eDirection opponent = dir switch
             {
-                Direction.Up => Direction.Down,
-                Direction.Down => Direction.Up,
-                Direction.Left => Direction.Right,
-                Direction.Right => Direction.Left,
-                _ => Direction.Up
+                eDirection.eUp => eDirection.eDown,
+                eDirection.eDown => eDirection.eUp,
+                eDirection.eLeft => eDirection.eRight,
+                eDirection.eRight => eDirection.eLeft,
+                _ => eDirection.eUp
             };
 
             return opponent;

@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using CityGenerator.TensorFields;
-using Scenes;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Utility;
-using Utilty;
 
 namespace CityGenerator
 {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace WaveFunctionCollapse
+namespace Utility.WaveFunctionCollapse
 {
     public class PatternManager
     {
