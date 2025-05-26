@@ -284,7 +284,7 @@ namespace Utility
                         continue;
                     }
 
-                    var edgeEventPoint = StraightPolygon.GetIntersectPointWithOppositeEdge(
+                    var edgeEventPoint = StraightSkeleton.StraightSkeleton.GetIntersectPointWithOppositeEdge(
                         linkedShrinkPoints[i].Position, linkedShrinkPoints[i].NextPoint.Position, bisectorDirections[i],
                         currentCheckEdgePoint.Position, currentCheckEdgePoint.NextPoint.Position);
                     float edgeEventDistance = MathUtil.GetLineToPositionDistance(currentCheckEdgePoint.Position,

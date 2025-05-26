@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Utility.StraightSkeleton
 {
-    public class StraightPolygon
+    public class StraightSkeleton
     {
         public class Vertex
         {

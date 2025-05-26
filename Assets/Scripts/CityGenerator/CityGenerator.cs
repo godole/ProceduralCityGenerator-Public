@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CityGenerator.TensorFields;
+using ProceduralBuildingGenerator;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Utility;
@@ -10,7 +11,7 @@ namespace CityGenerator
     public class CityGenerator : MonoBehaviour
     {
         [Header("Input Data")]
-        [SerializeField] private ProceduralBuildingGenerator _buildingGenerator;
+        [SerializeField] private ProceduralBuildingGenerator.ProceduralBuildingGenerator _buildingGenerator;
         [SerializeField] private Vector2Int _size;
         [SerializeField] private Vector2 _center;
         [SerializeField] private float _loadDistance;
@@ -23,9 +24,6 @@ namespace CityGenerator
         [SerializeField] private Material _polygonMaterial;
         [SerializeField] private LineRenderer _minorStreamline;
         [SerializeField] private List<Material> _buildingMaterials;
-        
-        [Header("Test Data")]
-        [SerializeField] private GameObject _linkPointTester;
         
         private TensorFieldContainer _tensorFieldContainer;
         private readonly List<Streamline.Vertex> _seedPoints = new();
@@ -260,7 +258,7 @@ namespace CityGenerator
 
             for(var i = 0; i < results.Count; i++, _buildingIndex++)
             {
-                ProceduralBuildingGenerator.Mass mass = new ProceduralBuildingGenerator.Mass();
+                ProceduralBuildingGenerator.ProceduralBuildingGenerator.Mass mass = new ProceduralBuildingGenerator.ProceduralBuildingGenerator.Mass();
 
                 mass.FacadeRule = _buildingGenerator._rootRule;
                 mass.CornerRule = _buildingGenerator._cornerRule;

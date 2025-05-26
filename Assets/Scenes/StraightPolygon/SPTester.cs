@@ -23,9 +23,9 @@ public class SPTester : MonoBehaviour
             inputs.Add(current);
         }
 
-        StraightPolygon straightPolygon = new StraightPolygon();
+        StraightSkeleton straightSkeleton = new StraightSkeleton();
 
-        var resultEdges = straightPolygon.Process(inputs); 
+        var resultEdges = straightSkeleton.Process(inputs); 
         
         foreach (var result in resultEdges)
         {
