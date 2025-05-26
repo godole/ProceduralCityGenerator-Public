@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Utility;
+using Utility.Triangulation;
 
 namespace Scenes
 {
@@ -28,7 +30,7 @@ namespace Scenes
             var meshRenderer = meshObject.AddComponent<MeshRenderer>();
             meshRenderer.material = renderMaterial;
         
-            var triangulation = new BowyerWatson();
+            var triangulation = new Triangulation();
             var triangulationResult = triangulation.Calculate(polygonPoints);
 
             var polygonUvs = new Vector2[polygonPoints.Count];
@@ -99,7 +101,7 @@ namespace Scenes
             meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             meshRenderer.receiveShadows = false;
         
-            var triangulation = new BowyerWatson();
+            var triangulation = new Triangulation();
             var triangulationResult = triangulation.Calculate(polygonPoints);
             
             for (int i = 0; i < buildingPoints.Count; i++)
@@ -200,7 +202,7 @@ namespace Scenes
             mesh.vertices = buildingPoints.ToArray();
             mesh.uv = polygonUvs;
             
-            var triangulation = new BowyerWatson();
+            var triangulation = new Triangulation();
             var triangulationResult = triangulation.Calculate(polygonPoints);
             
             foreach (var triangle in triangulationResult)

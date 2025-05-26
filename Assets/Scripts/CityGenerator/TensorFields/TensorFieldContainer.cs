@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using CityGenerator.TensorFields;
 using UnityEngine;
 
 public class TensorFieldContainer
@@ -22,7 +23,7 @@ public class TensorFieldContainer
 
         foreach (var tensorField in _tensorFields)
         {
-            tensorField.CalculateTensor(pos, isMajor);
+            tensorField.CalculateTensor(pos);
 
             for (int i = 0; i < _tensorField.Values.GetLength(0); i++)
             {
@@ -35,7 +36,7 @@ public class TensorFieldContainer
         
         _tensorField.CalculateEigen();
 
-        return (isMajor ? _tensorField.majorEigenVector : _tensorField.minorEigenVector) ;;
+        return (isMajor ? _tensorField.MajorEigenVector : _tensorField.MinorEigenVector) ;;
     }
 
     public Vector3 GetTensorSampling(Vector3 pos, Vector3 prevDir, bool isMajor)
