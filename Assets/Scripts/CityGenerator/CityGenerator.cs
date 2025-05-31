@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using CityGenerator.TensorFields;
 using ProceduralBuildingGenerator;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Utility;
@@ -12,8 +11,9 @@ namespace CityGenerator
 {
     public class CityGenerator : MonoBehaviour
     {
+        [FormerlySerializedAs("_buildingGenerator")]
         [Header("Input Data")]
-        [SerializeField] private ProceduralBuildingGenerator.ProceduralBuildingGenerator _buildingGenerator;
+        [SerializeField] private BuildingRuleData _buildingRuleData;
         [SerializeField] private Vector2Int _size;
         [SerializeField] private Vector2 _center;
         [SerializeField] private float _loadDistance;
@@ -42,8 +42,8 @@ namespace CityGenerator
         {
             buildingObjectParent = new GameObject("BuildingObjectParent");
             
-            ObjectPoolContainer.Instance.InitWithPoolData(_buildingGenerator._poolDatas);
-            ObjectPoolContainer.Instance.ResetAll();
+            BuildingRuleData.ObjectPoolContainer.Instance.InitWithPoolData(_buildingRuleData._poolData);
+            BuildingRuleData.ObjectPoolContainer.Instance.ResetAll();
         
             _maxCalculateCountInternal = _maxCalculateCount;
             _sizeInternal = new Vector3(_size.x, 0.0f, _size.y);
@@ -269,10 +269,10 @@ namespace CityGenerator
 
                 foreach (var shrinkPolygon in shrinkPolygons)
                 {
-                    ProceduralBuildingGenerator.ProceduralBuildingGenerator.Mass mass = new ProceduralBuildingGenerator.ProceduralBuildingGenerator.Mass();
+                    ProceduralBuildingGenerator.BuildingRuleData.Mass mass = new ProceduralBuildingGenerator.BuildingRuleData.Mass();
 
-                    mass.FacadeRule = _buildingGenerator._rootRule;
-                    mass.CornerRule = _buildingGenerator._cornerRule;
+                    mass.FacadeRule = _buildingRuleData._rootRule;
+                    mass.CornerRule = _buildingRuleData._cornerRule;
 
                     var buildingObject = new GameObject($"{_buildingIndex}");
 

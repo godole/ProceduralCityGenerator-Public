@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ProceduralBuildingGenerator
 {
@@ -11,7 +12,7 @@ namespace ProceduralBuildingGenerator
     
     public class BuildingGeneratorTest : MonoBehaviour
     {
-        [SerializeField] private ProceduralBuildingGenerator _buildingGenerator;
+        [SerializeField] private BuildingRuleData _buildingRuleData;
         [SerializeField] private Transform _buildingPointParent;
         [SerializeField] private float _buildingHeight;
     
@@ -24,27 +25,25 @@ namespace ProceduralBuildingGenerator
                 _buildingPoints.Add(_buildingPointParent.GetChild(i).position);
             }
         
-            ObjectPoolContainer.Instance.InitWithPoolData(_buildingGenerator._poolDatas);
-            ObjectPoolContainer.Instance.ResetAll();
+            BuildingRuleData.ObjectPoolContainer.Instance.InitWithPoolData(_buildingRuleData._poolData);
+            BuildingRuleData.ObjectPoolContainer.Instance.ResetAll();
         
-            ProceduralBuildingGenerator.Mass mass = new()
+            BuildingRuleData.Mass mass = new()
             {
-                FacadeRule = _buildingGenerator._rootRule,
-                CornerRule = _buildingGenerator._cornerRule
+                FacadeRule = _buildingRuleData._rootRule,
+                CornerRule = _buildingRuleData._cornerRule
             };
 
             GameObject buildingParent = new GameObject("building");
 
             mass.CreateFacade(_buildingHeight, _buildingPoints);
             
-            foreach (ProceduralBuildingGenerator.Context facade in mass._childContexts)
+            foreach (BuildingRuleData.Context facade in mass._childContexts)
             {
                 var facadeObject = new GameObject("facade");
                 facadeObject.transform.SetParent(buildingParent.transform);
                 facade.CreatePrimitive(facadeObject);
             }
-            
-            
         }
     }
 }
