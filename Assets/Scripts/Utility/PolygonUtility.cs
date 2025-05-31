@@ -279,7 +279,8 @@ namespace Utility
                     float lineToPositionDistance = MathUtil.GetLineToPositionDistance(currentCheckEdgePoint.Position,
                         currentCheckEdgePoint.NextPoint.Position, polygonPoints[i]);
 
-                    if (!(lineToPositionDistance < distance / distanceParents[i] + distance))
+                    if (!(lineToPositionDistance < distance / distanceParents[i] + distance) ||
+                        !MathUtil.IsCrossLine(currentCheckEdgePoint.Position, currentCheckEdgePoint.NextPoint.Position, polygonPoints[i], shrinkPoints[i]))
                     {
                         continue;
                     }

@@ -134,7 +134,6 @@ GameObject:
   - component: {fileID: 25775965}
   - component: {fileID: 25775964}
   - component: {fileID: 25775963}
-  - component: {fileID: 25775962}
   m_Layer: 0
   m_Name: InputTexture
   m_TagString: Untagged
@@ -142,20 +141,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!64 &25775962
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 25775961}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &25775963
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -164,7 +149,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 25775961}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -413,6 +398,7 @@ GameObject:
   m_Component:
   - component: {fileID: 618960935}
   - component: {fileID: 618960934}
+  - component: {fileID: 618960936}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -497,6 +483,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &618960936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 618960933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &923883077
 GameObject:
   m_ObjectHideFlags: 0
@@ -610,6 +616,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputPreviewObject: {fileID: 25775963}
-  inputData: {fileID: 11400000, guid: a598a6e009a4fd24ebc159058f985d92, type: 2}
+  inputData: {fileID: 11400000, guid: 2a48834646d3bc04f8cb8de4e162ec22, type: 2}
   _outputSize: {x: 100, y: 100}
   _outputTexture: {fileID: 407664191}

@@ -3,6 +3,12 @@ using UnityEngine;
 
 namespace ProceduralBuildingGenerator
 {
+    class MeshCombineData
+    {
+        public Material Material;
+        public List<GameObject> Objects;
+    }
+    
     public class BuildingGeneratorTest : MonoBehaviour
     {
         [SerializeField] private ProceduralBuildingGenerator _buildingGenerator;
@@ -27,12 +33,18 @@ namespace ProceduralBuildingGenerator
                 CornerRule = _buildingGenerator._cornerRule
             };
 
+            GameObject buildingParent = new GameObject("building");
+
             mass.CreateFacade(_buildingHeight, _buildingPoints);
             
             foreach (ProceduralBuildingGenerator.Context facade in mass._childContexts)
             {
-                facade.CreatePrimitive(new GameObject());
+                var facadeObject = new GameObject("facade");
+                facadeObject.transform.SetParent(buildingParent.transform);
+                facade.CreatePrimitive(facadeObject);
             }
+            
+            
         }
     }
 }

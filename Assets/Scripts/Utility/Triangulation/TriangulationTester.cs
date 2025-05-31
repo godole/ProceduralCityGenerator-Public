@@ -14,7 +14,7 @@ namespace Utility.Triangulation
 
         [SerializeField] bool _drawDelawrey;
 
-        private Triangulation _triangulation = new global::Utility.Triangulation.Triangulation();
+        private Triangulation _triangulation = new();
 
         // Start is called before the first frame update
         void Start()

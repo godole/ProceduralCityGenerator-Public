@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using CityGenerator.TensorFields;
 using ProceduralBuildingGenerator;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Utility;
@@ -22,6 +24,7 @@ namespace CityGenerator
         [Header("Visualizer Data")]
         [FormerlySerializedAs("_streamline")] [SerializeField] private LineRenderer _mainStreamline;
         [SerializeField] private Material _polygonMaterial;
+        [SerializeField] private Material _buildingMaterial;
         [SerializeField] private LineRenderer _minorStreamline;
         [SerializeField] private List<Material> _buildingMaterials;
         
@@ -32,9 +35,13 @@ namespace CityGenerator
         private Vector3 _sizeInternal;
         private int _maxCalculateCountInternal;
         private int _buildingIndex;
+        
+        private GameObject buildingObjectParent;
     
         private void Start()
         {
+            buildingObjectParent = new GameObject("BuildingObjectParent");
+            
             ObjectPoolContainer.Instance.InitWithPoolData(_buildingGenerator._poolDatas);
             ObjectPoolContainer.Instance.ResetAll();
         
@@ -115,20 +122,55 @@ namespace CityGenerator
             
                 var polygonPoints = polygon.Indices.Select(polygonIndex => vertices[polygonIndex].Position * 100.0f).ToList();
                 var shrinkPolygons = PolygonSplit.GetShrinkPolygon(polygonPoints, 9f);
+                
+                foreach (var shrinkPolygon in shrinkPolygons)
+                {
+                    // if(i is > 30 and < 60)
+                    // {
+                    //     
+                    // }
+                    // else
+                    // {
+                    //     if (shrinkPolygon.Count < 3)
+                    //     {
+                    //         continue;
+                    //     }
+                    //     
+                    //     try
+                    //     {
+                    //         CreateParcelingBuildings(shrinkPolygon, i.ToString());    
+                    //     }
+                    //     catch (Exception e)
+                    //     {
+                    //         Debug.LogException(e);
+                    //     }
+                    // }
+                    
+                    if (shrinkPolygon.Count < 3)
+                    {
+                        continue;
+                    }
+                        
+                    try
+                    {
+                        CreateTexturedBuildings(shrinkPolygon);    
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                    
+                    TestUtil.CreateSolidPolygonObject(_polygonMaterial, shrinkPolygon);
+                }
 
                 // if (i == 130)
                 // {
                 //     CreateTexturedBuildings(shrinkPolygon);
                 // }
-                // else
-                {
-                    foreach (var shrinkPolygon in shrinkPolygons)
-                    {
-                        CreateParcelingBuildings(shrinkPolygon, i.ToString());    
-                    }
                 
-                }
             }
+            
+            //CombineMesh(buildingObjectParent);
         }
 
         void TraceStep(Streamline.Vertex startPosition, LineRenderer lineRenderer, float loadDistance)
@@ -182,42 +224,7 @@ namespace CityGenerator
             {
                 return;
             }
-        
-            GameObject groupParentObject = null;
-            if (!string.IsNullOrEmpty(groupName))
-            {
-                groupParentObject = new GameObject(groupName);
-            }
-
-            // if (groupName.Equals("1019"))
-            // {
-            //     var results = CreateBuildingPoints(subDivisionPoints);
-            //
-            //     var fixedPoints = new List<Vector3>();
-            //     var currentPolygon = results[0];
-            //
-            //     for (int i = 0; i < currentPolygon.Count; i++)
-            //     {
-            //         Vector3 prevPoint = currentPolygon[i - 1 < 0 ? currentPolygon.Count - 1 : i - 1];
-            //
-            //         if (Vector3.Distance(currentPolygon[i], prevPoint) < 3.0f)
-            //         {
-            //             continue;
-            //         }
-            //         
-            //         fixedPoints.Add(currentPolygon[i]);
-            //     }
-            //
-            //     TestUtil.CreateSolidPolygonObject(_buildingMaterials[0], fixedPoints);
-            //
-            //     var testAsset = ScriptableObject.CreateInstance<TestBuildingPositionData>();
-            //     testAsset.Positions = new List<Vector3>(fixedPoints);
-            //     AssetDatabase.CreateAsset(testAsset, $"Assets/TestBuildingPositionData{groupName}.asset");
-            //     AssetDatabase.SaveAssets();
-            // }
-            //
-            // return;
-        
+            
             var results = CreateBuildingPoints(subDivisionPoints);
         
             for(var i = 0; i < results.Count; i++, _buildingIndex++)
@@ -244,7 +251,7 @@ namespace CityGenerator
                     var buildingObject = TestUtil.CreateBuildingObject(_buildingMaterials[i % _buildingMaterials.Count], shrinkPolygon, UnityEngine.Random.Range(10.0f, 70.0f));
                     if (!string.IsNullOrEmpty(groupName))
                     {
-                        buildingObject.transform.SetParent(groupParentObject.transform);
+                        buildingObject.transform.SetParent(buildingObjectParent.transform);
                     }
                 
                     buildingObject.name = $"{_buildingIndex}";
@@ -258,24 +265,83 @@ namespace CityGenerator
 
             for(var i = 0; i < results.Count; i++, _buildingIndex++)
             {
-                ProceduralBuildingGenerator.ProceduralBuildingGenerator.Mass mass = new ProceduralBuildingGenerator.ProceduralBuildingGenerator.Mass();
+                var shrinkPolygons = PolygonSplit.GetShrinkPolygon(results[i], 5f);
 
-                mass.FacadeRule = _buildingGenerator._rootRule;
-                mass.CornerRule = _buildingGenerator._cornerRule;
-
-                var buildingObject = new GameObject($"{_buildingIndex}");
-
-                float height = UnityEngine.Random.Range(10f, 30f);
-        
-                mass.CreateFacade(height, results[i]);
-            
-                foreach (var facade in mass._childContexts)
+                foreach (var shrinkPolygon in shrinkPolygons)
                 {
-                    facade.CreatePrimitive(buildingObject);
-                }
+                    ProceduralBuildingGenerator.ProceduralBuildingGenerator.Mass mass = new ProceduralBuildingGenerator.ProceduralBuildingGenerator.Mass();
+
+                    mass.FacadeRule = _buildingGenerator._rootRule;
+                    mass.CornerRule = _buildingGenerator._cornerRule;
+
+                    var buildingObject = new GameObject($"{_buildingIndex}");
+
+                    float height = UnityEngine.Random.Range(10f, 30f);
+        
+                    mass.CreateFacade(height, shrinkPolygon);
             
-                var roofObject = TestUtil.CreateRoofObject(_polygonMaterial, results[i], height);
-                roofObject.transform.SetParent(buildingObject.transform);
+                    foreach (var facade in mass._childContexts)
+                    {
+                        facade.CreatePrimitive(buildingObject);
+                    }
+            
+                    var roofObject = TestUtil.CreateRoofObject(_buildingMaterial, shrinkPolygon, height);
+                    roofObject.transform.SetParent(buildingObject.transform);
+
+                    CombineMesh(buildingObject);
+                    
+                    Destroy(buildingObject);
+                }
+            }
+        }
+
+        private void CombineMesh(GameObject buildingObject)
+        {
+            Dictionary<string, MeshCombineData> meshCombineData = new();
+            var meshFilters = buildingObject.GetComponentsInChildren<MeshFilter>();
+
+            for(int i = 0; i < meshFilters.Length; i++)
+            {
+                var meshRenderer = meshFilters[i].gameObject.GetComponent<MeshRenderer>();
+
+                if (!meshCombineData.ContainsKey(meshRenderer.sharedMaterial.name))
+                {
+                    var combineData = new MeshCombineData
+                    {
+                        Material = meshRenderer.sharedMaterial,
+                        Objects = new List<GameObject> { meshRenderer.gameObject }
+                    };
+                    
+                    meshCombineData.Add(meshRenderer.sharedMaterial.name, combineData);
+                }
+                else
+                {
+                    meshCombineData[meshRenderer.sharedMaterial.name].Objects.Add(meshFilters[i].gameObject);
+                }
+                
+                meshFilters[i].gameObject.SetActive(false);
+            }
+
+            foreach (var combineData in meshCombineData)
+            {
+                GameObject combinedObject = new GameObject(combineData.Key);
+                
+                CombineInstance[] combineInstances = new CombineInstance[combineData.Value.Objects.Count];
+
+                for (int i = 0; i < combineData.Value.Objects.Count; i++)
+                {
+                    combineInstances[i].mesh = combineData.Value.Objects[i].GetComponent<MeshFilter>().sharedMesh;
+                    combineInstances[i].transform = combineData.Value.Objects[i].transform.localToWorldMatrix;
+                }
+                
+                var combinedMesh = new Mesh();
+                combinedMesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+                combinedMesh.CombineMeshes(combineInstances);
+            
+                combinedObject.AddComponent<MeshFilter>().sharedMesh = combinedMesh;
+                var meshRenderer = combinedObject.AddComponent<MeshRenderer>();
+                meshRenderer.sharedMaterial = combineData.Value.Material;
+                meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             }
         }
 
@@ -299,7 +365,7 @@ namespace CityGenerator
                     continue;
                 }
         
-                var splitLine = PolygonUtility.GetSplitLine(minimumBoundingBox.Points, 0.001f);
+                var splitLine = PolygonUtility.GetSplitLine(minimumBoundingBox.Points, 5f);
                 var splitPolygons = PolygonUtility.SplitPolygon(polygon, splitLine[0], splitLine[1]);
 
                 splitPoints.AddRange(splitPolygons);
