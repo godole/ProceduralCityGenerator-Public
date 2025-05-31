@@ -6,6 +6,7 @@ using ProceduralBuildingGenerator;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Utility;
+using Utility.ObjectPool;
 
 namespace CityGenerator
 {
@@ -20,9 +21,10 @@ namespace CityGenerator
         [SerializeField] private float _minorLoadDistance;
         [SerializeField] private int _maxCalculateCount;
         [SerializeField] private List<TensorFieldData> _tensorFields;
-        
-        [Header("Visualizer Data")]
-        [FormerlySerializedAs("_streamline")] [SerializeField] private LineRenderer _mainStreamline;
+
+        [Header("Visualizer Data")] 
+        [SerializeField] private List<ObjectPoolData> ObjectPoolData;
+        [SerializeField] private LineRenderer _mainStreamline;
         [SerializeField] private Material _polygonMaterial;
         [SerializeField] private Material _buildingMaterial;
         [SerializeField] private LineRenderer _minorStreamline;
@@ -41,9 +43,13 @@ namespace CityGenerator
         private void Start()
         {
             buildingObjectParent = new GameObject("BuildingObjectParent");
+
+            foreach (ObjectPoolData objectPoolData in ObjectPoolData)
+            {
+                ObjectPoolContainer.Instance.InitWithPoolData(objectPoolData);    
+            }
             
-            BuildingRuleData.ObjectPoolContainer.Instance.InitWithPoolData(_buildingRuleData._poolData);
-            BuildingRuleData.ObjectPoolContainer.Instance.ResetAll();
+            ObjectPoolContainer.Instance.ResetAll();
         
             _maxCalculateCountInternal = _maxCalculateCount;
             _sizeInternal = new Vector3(_size.x, 0.0f, _size.y);
@@ -125,27 +131,6 @@ namespace CityGenerator
                 
                 foreach (var shrinkPolygon in shrinkPolygons)
                 {
-                    // if(i is > 30 and < 60)
-                    // {
-                    //     
-                    // }
-                    // else
-                    // {
-                    //     if (shrinkPolygon.Count < 3)
-                    //     {
-                    //         continue;
-                    //     }
-                    //     
-                    //     try
-                    //     {
-                    //         CreateParcelingBuildings(shrinkPolygon, i.ToString());    
-                    //     }
-                    //     catch (Exception e)
-                    //     {
-                    //         Debug.LogException(e);
-                    //     }
-                    // }
-                    
                     if (shrinkPolygon.Count < 3)
                     {
                         continue;
@@ -162,18 +147,10 @@ namespace CityGenerator
                     
                     TestUtil.CreateSolidPolygonObject(_polygonMaterial, shrinkPolygon);
                 }
-
-                // if (i == 130)
-                // {
-                //     CreateTexturedBuildings(shrinkPolygon);
-                // }
-                
             }
-            
-            //CombineMesh(buildingObjectParent);
         }
 
-        void TraceStep(Streamline.Vertex startPosition, LineRenderer lineRenderer, float loadDistance)
+        private void TraceStep(Streamline.Vertex startPosition, LineRenderer lineRenderer, float loadDistance)
         {
             var startStreamline = new Streamline(_tensorFieldContainer, _vertexField, _seedVertexField, loadDistance);
         
@@ -269,21 +246,9 @@ namespace CityGenerator
 
                 foreach (var shrinkPolygon in shrinkPolygons)
                 {
-                    ProceduralBuildingGenerator.BuildingRuleData.Mass mass = new ProceduralBuildingGenerator.BuildingRuleData.Mass();
-
-                    mass.FacadeRule = _buildingRuleData._rootRule;
-                    mass.CornerRule = _buildingRuleData._cornerRule;
-
-                    var buildingObject = new GameObject($"{_buildingIndex}");
-
                     float height = UnityEngine.Random.Range(10f, 30f);
-        
-                    mass.CreateFacade(height, shrinkPolygon);
-            
-                    foreach (var facade in mass._childContexts)
-                    {
-                        facade.CreatePrimitive(buildingObject);
-                    }
+                    
+                    var buildingObject = ProceduralBuildingGenerator.ProceduralBuildingGenerator.Generate(height, shrinkPolygon, _buildingRuleData);
             
                     var roofObject = TestUtil.CreateRoofObject(_buildingMaterial, shrinkPolygon, height);
                     roofObject.transform.SetParent(buildingObject.transform);

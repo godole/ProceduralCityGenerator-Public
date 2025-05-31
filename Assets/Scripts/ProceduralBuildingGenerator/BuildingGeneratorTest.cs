@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Utility.ObjectPool;
 
 namespace ProceduralBuildingGenerator
 {
@@ -12,38 +13,23 @@ namespace ProceduralBuildingGenerator
     
     public class BuildingGeneratorTest : MonoBehaviour
     {
-        [SerializeField] private BuildingRuleData _buildingRuleData;
-        [SerializeField] private Transform _buildingPointParent;
-        [SerializeField] private float _buildingHeight;
+        [SerializeField] private ObjectPoolData BuildingPoolData;
+        [FormerlySerializedAs("_buildingRuleData")] [SerializeField] private BuildingRuleData BuildingRuleData;
+        [FormerlySerializedAs("_buildingPointParent")] [SerializeField] private Transform BuildingPointParent;
+        [FormerlySerializedAs("_buildingHeight")] [SerializeField] private float BuildingHeight;
     
         private readonly List<Vector3> _buildingPoints = new();
     
         private void Start()
         {
-            for (int i = 0; i < _buildingPointParent.childCount; i++)
-            {
-                _buildingPoints.Add(_buildingPointParent.GetChild(i).position);
-            }
-        
-            BuildingRuleData.ObjectPoolContainer.Instance.InitWithPoolData(_buildingRuleData._poolData);
-            BuildingRuleData.ObjectPoolContainer.Instance.ResetAll();
-        
-            BuildingRuleData.Mass mass = new()
-            {
-                FacadeRule = _buildingRuleData._rootRule,
-                CornerRule = _buildingRuleData._cornerRule
-            };
-
-            GameObject buildingParent = new GameObject("building");
-
-            mass.CreateFacade(_buildingHeight, _buildingPoints);
+            ObjectPoolContainer.Instance.InitWithPoolData(BuildingPoolData);    
             
-            foreach (BuildingRuleData.Context facade in mass._childContexts)
+            for (int i = 0; i < BuildingPointParent.childCount; i++)
             {
-                var facadeObject = new GameObject("facade");
-                facadeObject.transform.SetParent(buildingParent.transform);
-                facade.CreatePrimitive(facadeObject);
+                _buildingPoints.Add(BuildingPointParent.GetChild(i).position);
             }
+        
+            ProceduralBuildingGenerator.Generate(BuildingHeight, _buildingPoints, BuildingRuleData);
         }
     }
 }
