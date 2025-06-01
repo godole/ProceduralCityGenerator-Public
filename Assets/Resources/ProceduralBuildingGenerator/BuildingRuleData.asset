@@ -13,112 +13,176 @@ MonoBehaviour:
   m_Name: BuildingRuleData
   m_EditorClassIdentifier: 
   RootRule:
+    Name: 
     Concat: 
     Argument: 
     ChildRules:
-    - Concat: StaticSplitY
+    - Name: 
+      Concat: StaticSplitY
       Argument: 6
       ChildRules:
-      - Concat: RepeatX
-        Argument: 8
-        ChildRules:
-        - Concat: Primitive
-          Argument: wall
-          ChildRules:
-          - Concat: Primitive
-            Argument: wall
-            ChildRules: []
-      - Concat: ScalableX
+      - Name: 
+        Concat: ScalableX
         Argument: 6
         ChildRules:
-        - Concat: Primitive
+        - Name: 
+          Concat: Primitive
           Argument: firstFloorScalable
           ChildRules:
-          - Concat: Primitive
+          - Name: 
+            Concat: Primitive
             Argument: wall
             ChildRules: []
-      - Concat: XScalable
+      - Name: 
+        Concat: XScalable
         Argument: 6
         ChildRules:
-        - Concat: Primitive
+        - Name: 
+          Concat: Primitive
           Argument: firstFloorScalable
           ChildRules:
-          - Concat: Primitive
+          - Name: 
+            Concat: Primitive
             Argument: wall
             ChildRules: []
-    - Concat: YStaticSplit
+      - Name: 
+        Concat: SubDivRandomX
+        Argument: '[8,DrugStore][12,GS25]'
+        ChildRules:
+        - Name: DrugStore
+          Concat: 
+          Argument: 
+          ChildRules:
+          - Name: 
+            Concat: Primitive
+            Argument: DrugStore
+            ChildRules: []
+        - Name: GS25
+          Concat: 
+          Argument: 
+          ChildRules:
+          - Name: 
+            Concat: Primitive
+            Argument: GS25
+            ChildRules: []
+    - Name: 
+      Concat: YStaticSplit
       Argument: 1.0
       ChildRules:
-      - Concat: YScalable
+      - Name: 
+        Concat: YScalable
         Argument: 1.0
         ChildRules:
-        - Concat: Primitive
+        - Name: 
+          Concat: Primitive
           Argument: moseori
           ChildRules: []
-    - Concat: RepeatY
+    - Name: 
+      Concat: RepeatY
       Argument: 4
       ChildRules:
-      - Concat: RepeatX
-        Argument: 4
+      - Name: 
+        Concat: StaticSplitY
+        Argument: 3
         ChildRules:
-        - Concat: Primitive
-          Argument: window
-          ChildRules: []
-      - Concat: ScalableX
-        Argument: 4
+        - Name: 
+          Concat: RepeatX
+          Argument: 4
+          ChildRules:
+          - Name: 
+            Concat: Primitive
+            Argument: window
+            ChildRules: []
+        - Name: 
+          Concat: ScalableX
+          Argument: 4
+          ChildRules:
+          - Name: 
+            Concat: Primitive
+            Argument: firstFloorScalable
+            ChildRules: []
+        - Name: 
+          Concat: XScalable
+          Argument: 4
+          ChildRules:
+          - Name: 
+            Concat: Primitive
+            Argument: firstFloorScalable
+            ChildRules: []
+      - Name: 
+        Concat: YStaticSplit
+        Argument: 1
         ChildRules:
-        - Concat: Primitive
-          Argument: firstFloorScalable
+        - Name: 
+          Concat: RepeatX
+          Argument: 4
           ChildRules: []
-      - Concat: XScalable
-        Argument: 4
-        ChildRules:
-        - Concat: Primitive
-          Argument: firstFloorScalable
-          ChildRules: []
-    - Concat: ScalableY
+        - Name: 
+          Concat: ScalableX
+          Argument: 4
+          ChildRules:
+          - Name: 
+            Concat: Primitive
+            Argument: firstFloorScalable
+            ChildRules: []
+        - Name: 
+          Concat: XScalable
+          Argument: 4
+          ChildRules:
+          - Name: 
+            Concat: Primitive
+            Argument: firstFloorScalable
+            ChildRules: []
+        - Name: 
+          Concat: SubDivRandomX
+          Argument: '[4,test1][8,test2][12,test3][8, Empty]'
+          ChildRules:
+          - Name: test1
+            Concat: 
+            Argument: 
+            ChildRules:
+            - Name: 
+              Concat: Primitive
+              Argument: test1
+              ChildRules: []
+          - Name: test2
+            Concat: 
+            Argument: 
+            ChildRules:
+            - Name: 
+              Concat: Primitive
+              Argument: test2
+              ChildRules: []
+          - Name: test3
+            Concat: 
+            Argument: 
+            ChildRules:
+            - Name: 
+              Concat: Primitive
+              Argument: test3
+              ChildRules: []
+          - Name: Empty
+            Concat: 
+            Argument: 
+            ChildRules: []
+    - Name: 
+      Concat: ScalableY
       Argument: 1
       ChildRules:
-      - Concat: Primitive
+      - Name: 
+        Concat: Primitive
         Argument: moseori
         ChildRules: []
-    - Concat: YScalable
+    - Name: 
+      Concat: YScalable
       Argument: 1
       ChildRules:
-      - Concat: Primitive
+      - Name: 
+        Concat: Primitive
         Argument: moseori
         ChildRules: []
   CornerRule:
+    Name: 
     Concat: 
     Argument: 
-    ChildRules:
-    - Concat: RepeatY
-      Argument: 2.0
-      ChildRules:
-      - Concat: Primitive
-        Argument: corner_updown
-        ChildRules: []
-    - Concat: YScalable
-      Argument: 1
-      ChildRules:
-      - Concat: Primitive
-        Argument: corner_scalable
-        ChildRules: []
-    - Concat: ScalableY
-      Argument: 1
-      ChildRules:
-      - Concat: Primitive
-        Argument: corner_scalable
-        ChildRules: []
-    - Concat: StaticSplitY
-      Argument: 1
-      ChildRules:
-      - Concat: Primitive
-        Argument: corner_first
-        ChildRules: []
-    - Concat: YStaticSplit
-      Argument: 1
-      ChildRules:
-      - Concat: Primitive
-        Argument: corner_top
-        ChildRules: []
+    ChildRules: []
