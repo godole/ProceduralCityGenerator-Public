@@ -14,9 +14,9 @@ namespace ProceduralBuildingGenerator
     public class BuildingGeneratorTest : MonoBehaviour
     {
         [SerializeField] private ObjectPoolData BuildingPoolData;
-        [FormerlySerializedAs("_buildingRuleData")] [SerializeField] private BuildingRuleData BuildingRuleData;
-        [FormerlySerializedAs("_buildingPointParent")] [SerializeField] private Transform BuildingPointParent;
-        [FormerlySerializedAs("_buildingHeight")] [SerializeField] private float BuildingHeight;
+        [SerializeField] private BuildingRuleData BuildingRuleData;
+        [SerializeField] private Transform BuildingPointParent;
+        [SerializeField] private float BuildingHeight;
     
         private readonly List<Vector3> _buildingPoints = new();
     

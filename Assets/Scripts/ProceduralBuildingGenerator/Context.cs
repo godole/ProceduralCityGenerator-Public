@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using Utility.ObjectPool;
 
@@ -214,6 +215,62 @@ namespace ProceduralBuildingGenerator
                         }
 
                         break;
+                    }
+                }
+            }
+
+            foreach (Rule rule in rules)
+            {
+                if (rule.Concat == "SubDivRandomX")
+                {
+                    string pattern = @"\[(\d+),\s*([^\]]+)\]";
+                    
+                    List<(float, Rule)> subDivs = new List<(float, Rule)>();
+                    var matches = Regex.Matches(rule.Argument, pattern);
+
+                    foreach (Match match in matches)
+                    {
+                        Rule find = rule.ChildRules.Find((arg) => match.Groups[2].Value.Equals(arg.Name));
+
+                        if (find == null)
+                        {
+                            continue;
+                        }
+                        
+                        subDivs.Add((float.Parse(match.Groups[1].Value), find));
+                    }
+
+                    float currentXPosition = 0.0f;
+                    List<Rule> removeRules = new List<Rule>();
+
+                    while (currentXPosition < Size.x)
+                    {
+                        var subDiv = subDivs[Random.Range(0, subDivs.Count)];
+                        
+                        var childContext = CreateChildContext(new Vector3(scalableSizeX + currentXPosition, 0.0f, 0.0f), Size,
+                            Quaternion.identity, subDiv.Item2);
+                        childContext._useLocalScale = false;
+                        currentXPosition += subDiv.Item1;
+
+                        foreach (var removeCheckSubDiv in subDivs)
+                        {
+                            if (removeCheckSubDiv.Item1 > Size.x - currentXPosition)
+                            {
+                                removeRules.Add(removeCheckSubDiv.Item2);
+                            }
+                        }
+
+                        foreach (Rule removeRule in removeRules)
+                        {
+                            subDivs.Remove(subDivs.Find((s) => s.Item2.Equals(removeRule)));
+                        }
+
+                        removeRules.Clear();
+
+                        if (subDivs.Count == 0)
+                        {
+                            break;
+                        }
                     }
                 }
             }

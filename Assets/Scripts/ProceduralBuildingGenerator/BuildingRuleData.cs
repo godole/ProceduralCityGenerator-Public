@@ -7,6 +7,7 @@ namespace ProceduralBuildingGenerator
     [System.Serializable]
     public class Rule
     {
+        public string Name;
         public string Concat;
         public string Argument;
         public List<Rule> ChildRules = new();
