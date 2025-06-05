@@ -243,16 +243,18 @@ namespace CityGenerator
             for(var i = 0; i < results.Count; i++, _buildingIndex++)
             {
                 var shrinkPolygons = PolygonSplit.GetShrinkPolygon(results[i], 5f);
-
+                
                 foreach (var shrinkPolygon in shrinkPolygons)
                 {
+                    var building = new GameObject();
+                    
                     float height = UnityEngine.Random.Range(10f, 30f);
                     
                     var buildingObject = ProceduralBuildingGenerator.ProceduralBuildingGenerator.Generate(height, shrinkPolygon, _buildingRuleData);
-            
+                    
                     var roofObject = TestUtil.CreateRoofObject(_buildingMaterial, shrinkPolygon, height);
                     roofObject.transform.SetParent(buildingObject.transform);
-
+                    
                     CombineMesh(buildingObject);
                     
                     Destroy(buildingObject);
@@ -314,6 +316,8 @@ namespace CityGenerator
         {
             List<List<Vector3>> results = new List<List<Vector3>>();
             List<List<Vector3>> splitPoints = new List<List<Vector3>> { subDivisionPoints };
+            
+            ConvertSmoothPolygon(subDivisionPoints);
 
             while(splitPoints.Count > 0)
             {
@@ -337,6 +341,36 @@ namespace CityGenerator
             }
 
             return results;
+        }
+
+        private void ConvertSmoothPolygon(List<Vector3> polygonPoints)
+        {
+            var minAngle = Mathf.Cos(Mathf.Deg2Rad * 10f);
+            List<Vector3> removePoints = new List<Vector3>();
+            Vector3 prevPoint = polygonPoints[0];
+            Vector3 currentPoint = polygonPoints[1];
+            
+
+            for (int i = 2; i < polygonPoints.Count; i++)
+            {
+                Vector3 prevToCurrentDir = Vector3.Normalize(currentPoint - prevPoint);
+                Vector3 curToNextDir = Vector3.Normalize( polygonPoints[i] - currentPoint);
+
+                if (Vector3.Dot(prevToCurrentDir, curToNextDir) < minAngle)
+                {
+                    prevPoint = polygonPoints[i - 2];
+                    currentPoint = polygonPoints[i - 1];
+                    continue;
+                }
+                
+                removePoints.Add(currentPoint);
+                currentPoint = polygonPoints[i];
+            }
+
+            foreach (var point in removePoints)
+            {
+                polygonPoints.Remove(point);
+            }
         }
     }
 }
