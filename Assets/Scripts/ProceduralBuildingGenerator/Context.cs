@@ -227,6 +227,7 @@ namespace ProceduralBuildingGenerator
                     
                     List<(float, Rule)> subDivs = new List<(float, Rule)>();
                     var matches = Regex.Matches(rule.Argument, pattern);
+                    float childMinSize = float.MaxValue;
 
                     foreach (Match match in matches)
                     {
@@ -237,7 +238,19 @@ namespace ProceduralBuildingGenerator
                             continue;
                         }
                         
-                        subDivs.Add((float.Parse(match.Groups[1].Value), find));
+                        float childContextSize = float.Parse(match.Groups[1].Value);
+
+                        if (childContextSize < childMinSize)
+                        {
+                            childMinSize = childContextSize;
+                        }
+                        
+                        subDivs.Add((childContextSize, find));
+                    }
+
+                    if (childMinSize > Size.x)
+                    {
+                        break;
                     }
 
                     float currentXPosition = 0.0f;
@@ -245,13 +258,6 @@ namespace ProceduralBuildingGenerator
 
                     while (currentXPosition < Size.x)
                     {
-                        var subDiv = subDivs[Random.Range(0, subDivs.Count)];
-                        
-                        var childContext = CreateChildContext(new Vector3(scalableSizeX + currentXPosition, 0.0f, 0.0f), Size,
-                            Quaternion.identity, subDiv.Item2);
-                        childContext._useLocalScale = false;
-                        currentXPosition += subDiv.Item1;
-
                         foreach (var removeCheckSubDiv in subDivs)
                         {
                             if (removeCheckSubDiv.Item1 > Size.x - currentXPosition)
@@ -271,6 +277,13 @@ namespace ProceduralBuildingGenerator
                         {
                             break;
                         }
+                        
+                        var subDiv = subDivs[Random.Range(0, subDivs.Count)];
+                        
+                        var childContext = CreateChildContext(new Vector3(scalableSizeX + currentXPosition, 0.0f, 0.0f), Size,
+                            Quaternion.identity, subDiv.Item2);
+                        childContext._useLocalScale = false;
+                        currentXPosition += subDiv.Item1;
                     }
                 }
             }
