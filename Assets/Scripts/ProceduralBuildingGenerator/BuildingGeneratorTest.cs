@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Utility;
 using Utility.ObjectPool;
 
 namespace ProceduralBuildingGenerator
@@ -16,6 +17,7 @@ namespace ProceduralBuildingGenerator
         [SerializeField] private ObjectPoolData BuildingPoolData;
         [SerializeField] private BuildingRuleData BuildingRuleData;
         [SerializeField] private Transform BuildingPointParent;
+        [SerializeField] private Material _buildingMaterial;
         [SerializeField] private float BuildingHeight;
     
         private readonly List<Vector3> _buildingPoints = new();
@@ -30,6 +32,7 @@ namespace ProceduralBuildingGenerator
             }
         
             ProceduralBuildingGenerator.Generate(BuildingHeight, _buildingPoints, BuildingRuleData);
+            var roofObject = TestUtil.CreateRoofObject(_buildingMaterial, _buildingPoints, BuildingHeight);
         }
     }
 }
