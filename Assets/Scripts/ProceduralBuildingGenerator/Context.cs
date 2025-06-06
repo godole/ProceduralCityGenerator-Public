@@ -25,6 +25,9 @@ namespace ProceduralBuildingGenerator
 
         private GameObject _attachedObject;
 
+        private const string LeftArgPattern = @"\[(left),\s*([A-Za-z0-9_]+)\]";
+        private const string RightArgPattern = @"\[(right),\s*([A-Za-z0-9_]+)\]";
+
         public void ParseRule(List<Rule> rules)
         {
             foreach (var rule in rules)
@@ -104,10 +107,17 @@ namespace ProceduralBuildingGenerator
                 {
                     case "RepeatX":
                     {
-                        if (!float.TryParse(rule.Argument, out var sizeX))
+                        string pattern = @"\[(?:(\d+),\s*([A-Za-z0-9_]+)|([A-Za-z0-9_]+))\]";
+                    
+                        Dictionary<string, Rule> childRules = new();
+                        var repeatMatch = Regex.Match(rule.Argument, pattern);
+
+                        foreach (Rule childRule in rule.ChildRules)
                         {
-                            continue;
+                            childRules.Add(childRule.Name, childRule);
                         }
+
+                        float sizeX = float.Parse(repeatMatch.Groups[1].Value);
 
                         float countFloat = RelativeSize.x / sizeX;
                         int count = (int)countFloat;
@@ -119,9 +129,11 @@ namespace ProceduralBuildingGenerator
                         while (remainX < RelativeSize.x + _relativePosition.x - sizeX * 0.5f)
                         {
                             CreateChildContext(new Vector3(remainX, 0.0f, 0.0f), new Vector2(sizeX, Size.y),
-                                Quaternion.identity, rule);
+                                Quaternion.identity, childRules[repeatMatch.Groups[2].Value]);
                             remainX += sizeX;
                         }
+                        
+                        CreateScalableX(childRules, rule.Argument, scalableSizeX, scalableMaxX);
 
                         break;
                     }
@@ -139,7 +151,7 @@ namespace ProceduralBuildingGenerator
                         scalableMaxY = sizeY * count + scalableMinY + scalableSizeY;
                         float remainY = scalableSizeY + _relativePosition.y;
 
-                        while (remainY < RelativeSize.y + _relativePosition.y - sizeY * 0.5f)
+                        while (remainY <= RelativeSize.y + _relativePosition.y - sizeY * 0.5f)
                         {
                             CreateChildContext(new Vector3(0.0f, remainY, 0.0f), new Vector2(Size.x, sizeY),
                                 Quaternion.identity, rule);
@@ -178,8 +190,9 @@ namespace ProceduralBuildingGenerator
                             continue;
                         }
 
+                        float scalableSize = Mathf.Abs(scalableSizeX) < float.Epsilon ? Size.x : scalableSizeX;
                         var scalable = CreateChildContext(new Vector3(scalableMaxX, 0.0f, 0.0f),
-                            new Vector2(scalableSizeX, Size.y / realY), Quaternion.identity, rule);
+                            new Vector2(scalableSize, Size.y / realY), Quaternion.identity, rule);
                         scalable._useLocalScale = true;
                         break;
                     }
@@ -226,18 +239,17 @@ namespace ProceduralBuildingGenerator
                     string pattern = @"\[(\d+),\s*([^\]]+)\]";
                     
                     List<(float, Rule)> subDivs = new List<(float, Rule)>();
+                    Dictionary<string, Rule> childRules = new Dictionary<string, Rule>();
                     var matches = Regex.Matches(rule.Argument, pattern);
                     float childMinSize = float.MaxValue;
 
+                    foreach (Rule childRule in rule.ChildRules)
+                    {
+                        childRules.Add(childRule.Name, childRule);
+                    }
+
                     foreach (Match match in matches)
                     {
-                        Rule find = rule.ChildRules.Find((arg) => match.Groups[2].Value.Equals(arg.Name));
-
-                        if (find == null)
-                        {
-                            continue;
-                        }
-                        
                         float childContextSize = float.Parse(match.Groups[1].Value);
 
                         if (childContextSize < childMinSize)
@@ -245,48 +257,77 @@ namespace ProceduralBuildingGenerator
                             childMinSize = childContextSize;
                         }
                         
-                        subDivs.Add((childContextSize, find));
+                        subDivs.Add((childContextSize, childRules[match.Groups[2].Value]));
                     }
 
-                    if (childMinSize > Size.x)
-                    {
-                        break;
-                    }
-
+                    List<Context> subDivContexts = new List<Context>();
                     float currentXPosition = 0.0f;
-                    List<Rule> removeRules = new List<Rule>();
-
-                    while (currentXPosition < Size.x)
+                    
+                    if (childMinSize <= Size.x)
                     {
-                        foreach (var removeCheckSubDiv in subDivs)
+                        
+                        List<Rule> removeRules = new List<Rule>();
+
+                        while (currentXPosition < Size.x)
                         {
-                            if (removeCheckSubDiv.Item1 > Size.x - currentXPosition)
+                            foreach (var removeCheckSubDiv in subDivs)
                             {
-                                removeRules.Add(removeCheckSubDiv.Item2);
+                                if (removeCheckSubDiv.Item1 > Size.x - currentXPosition)
+                                {
+                                    removeRules.Add(removeCheckSubDiv.Item2);
+                                }
                             }
-                        }
 
-                        foreach (Rule removeRule in removeRules)
-                        {
-                            subDivs.Remove(subDivs.Find((s) => s.Item2.Equals(removeRule)));
-                        }
+                            foreach (Rule removeRule in removeRules)
+                            {
+                                subDivs.Remove(subDivs.Find((s) => s.Item2.Equals(removeRule)));
+                            }
 
-                        removeRules.Clear();
+                            removeRules.Clear();
 
-                        if (subDivs.Count == 0)
-                        {
-                            break;
-                        }
+                            if (subDivs.Count == 0)
+                            {
+                                break;
+                            }
                         
-                        var subDiv = subDivs[Random.Range(0, subDivs.Count)];
+                            var subDiv = subDivs[Random.Range(0, subDivs.Count)];
                         
-                        var childContext = CreateChildContext(new Vector3(scalableSizeX + currentXPosition, 0.0f, 0.0f), Size,
-                            Quaternion.identity, subDiv.Item2);
-                        childContext._useLocalScale = false;
-                        currentXPosition += subDiv.Item1;
+                            var childContext = CreateChildContext(new Vector3(scalableSizeX + currentXPosition, 0.0f, 0.0f), Size,
+                                Quaternion.identity, subDiv.Item2);
+                            childContext._useLocalScale = false;
+                            currentXPosition += subDiv.Item1;
+                            subDivContexts.Add(childContext);
+                        }
                     }
+                    
+                    float scalableSize = (Size.x - currentXPosition) * 0.5f;
+                    foreach (Context subDivContext in subDivContexts)
+                    {
+                        subDivContext.Position.x += scalableSize;
+                    }
+                    
+                    CreateScalableX(childRules, rule.Argument, scalableSize, currentXPosition + scalableSize);
                 }
             }
+        }
+
+        private void CreateScalableX(Dictionary<string, Rule> childRules, string argument, float scalableSizeX, float scalableMaxX)
+        {
+            var leftMatch = Regex.Match(argument, LeftArgPattern);
+
+            if (leftMatch.Success)
+            {
+                var scalableLeft = CreateChildContext(new Vector3(scalableMaxX, 0.0f, 0.0f),
+                    new Vector2(scalableSizeX, 1), Quaternion.identity, childRules[leftMatch.Groups[2].Value]);
+                scalableLeft._useLocalScale = true;
+            }
+            
+                        
+            var rightMatch = Regex.Match(argument, RightArgPattern);
+            if (!rightMatch.Success) return;
+            var scalableRight = CreateChildContext(new Vector3(_relativePosition.x, 0.0f, 0.0f),
+                new Vector2(scalableSizeX, 1), Quaternion.identity, childRules[rightMatch.Groups[2].Value]);
+            scalableRight._useLocalScale = true;
         }
 
         private Context CreateChildContext(Vector3 pos, Vector3 size, Quaternion rot, Rule rule)
