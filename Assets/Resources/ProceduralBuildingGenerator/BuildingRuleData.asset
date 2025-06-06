@@ -22,6 +22,10 @@ MonoBehaviour:
       Argument: 6
       ChildRules:
       - Name: 
+        Concat: RepeatX
+        Argument: 6
+        ChildRules: []
+      - Name: 
         Concat: ScalableX
         Argument: 6
         ChildRules:

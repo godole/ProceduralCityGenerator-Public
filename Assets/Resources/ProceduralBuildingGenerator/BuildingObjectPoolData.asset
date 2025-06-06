@@ -21,14 +21,6 @@ MonoBehaviour:
     Prefab: {fileID: 6652458049100189837, guid: a732ac2f1aeb88140ad609447812b848, type: 3}
   - Name: window
     Prefab: {fileID: 954216825735069305, guid: 1240b7848cf2cc34db41c19c43f2ffdb, type: 3}
-  - Name: corner_updown
-    Prefab: {fileID: 1582505378506897613, guid: 506be341c8b097f41a91385b2c0de7e1, type: 3}
-  - Name: corner_scalable
-    Prefab: {fileID: 1582505378506897613, guid: 506be341c8b097f41a91385b2c0de7e1, type: 3}
-  - Name: corner_first
-    Prefab: {fileID: 1582505378506897613, guid: 506be341c8b097f41a91385b2c0de7e1, type: 3}
-  - Name: corner_top
-    Prefab: {fileID: 1582505378506897613, guid: 506be341c8b097f41a91385b2c0de7e1, type: 3}
   - Name: test1
     Prefab: {fileID: 7537859990831134482, guid: 6332d1fbd4c3f7c459828d713d82e0f3, type: 3}
   - Name: test2
@@ -39,3 +31,5 @@ MonoBehaviour:
     Prefab: {fileID: 6882991601618564562, guid: 0579a7a334545214080730e281959d32, type: 3}
   - Name: DrugStore
     Prefab: {fileID: 6882991601618564562, guid: 838d15610ce2eec4abd3effddfeaec9a, type: 3}
+  - Name: FloorCorner
+    Prefab: {fileID: 5224096047251630082, guid: ba1ab3c3a9ee2c14faa2053931f38dfa, type: 3}
