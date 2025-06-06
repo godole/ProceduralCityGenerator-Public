@@ -851,8 +851,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BuildingPoolData: {fileID: 11400000, guid: ba3754fa7de24d742ae5e10f71bfc4ee, type: 2}
-  BuildingRuleData: {fileID: 11400000, guid: 758bebe163e57b544b1b1478b1c75dcc, type: 2}
+  BuildingRuleData: {fileID: 11400000, guid: 53aa02e2a5b41aa418c00bdfc338ca89, type: 2}
   BuildingPointParent: {fileID: 364760242}
+  _buildingMaterial: {fileID: 2100000, guid: e54c16db467618d49a964a40aa5ba0e2, type: 2}
   BuildingHeight: 30
 --- !u!4 &1582510239
 Transform:

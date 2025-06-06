@@ -31,5 +31,5 @@ MonoBehaviour:
     Prefab: {fileID: 6882991601618564562, guid: 0579a7a334545214080730e281959d32, type: 3}
   - Name: DrugStore
     Prefab: {fileID: 6882991601618564562, guid: 838d15610ce2eec4abd3effddfeaec9a, type: 3}
-  - Name: FloorCorner
-    Prefab: {fileID: 5224096047251630082, guid: ba1ab3c3a9ee2c14faa2053931f38dfa, type: 3}
+  - Name: floorCorner
+    Prefab: {fileID: 5224096047251630082, guid: 55af9712f22eff1488fe2aaad2c5059c, type: 3}

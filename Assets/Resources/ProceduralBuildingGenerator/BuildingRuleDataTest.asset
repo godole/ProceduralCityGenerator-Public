@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e1965c485503b549b795dafbb5f2586, type: 3}
-  m_Name: BuildingRuleData
+  m_Name: BuildingRuleDataTest
   m_EditorClassIdentifier: 
   RootRule:
     Name: 
@@ -22,36 +22,8 @@ MonoBehaviour:
       Argument: 6
       ChildRules:
       - Name: 
-        Concat: RepeatX
-        Argument: 6
-        ChildRules: []
-      - Name: 
-        Concat: ScalableX
-        Argument: 6
-        ChildRules:
-        - Name: 
-          Concat: Primitive
-          Argument: firstFloorScalable
-          ChildRules:
-          - Name: 
-            Concat: Primitive
-            Argument: wall
-            ChildRules: []
-      - Name: 
-        Concat: XScalable
-        Argument: 6
-        ChildRules:
-        - Name: 
-          Concat: Primitive
-          Argument: firstFloorScalable
-          ChildRules:
-          - Name: 
-            Concat: Primitive
-            Argument: wall
-            ChildRules: []
-      - Name: 
         Concat: SubDivRandomX
-        Argument: '[8,DrugStore][12,GS25]'
+        Argument: '[8,DrugStore][12,GS25][left,firstFloorCorner][right,firstFloorCorner]'
         ChildRules:
         - Name: DrugStore
           Concat: 
@@ -69,13 +41,21 @@ MonoBehaviour:
             Concat: Primitive
             Argument: GS25
             ChildRules: []
+        - Name: firstFloorCorner
+          Concat: 
+          Argument: 
+          ChildRules:
+          - Name: 
+            Concat: Primitive
+            Argument: firstFloorScalable
+            ChildRules: []
     - Name: 
       Concat: YStaticSplit
       Argument: 1.0
       ChildRules:
       - Name: 
-        Concat: YScalable
-        Argument: 1.0
+        Concat: Fill
+        Argument: 
         ChildRules:
         - Name: 
           Concat: Primitive
