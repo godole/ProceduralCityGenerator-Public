@@ -745,24 +745,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e8ee0e69a645934a8b464502ce98a8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buildingRuleData: {fileID: 11400000, guid: 758bebe163e57b544b1b1478b1c75dcc, type: 2}
+  _buildingRuleData: {fileID: 11400000, guid: 032d7257418f135488758c542a767fe1, type: 2}
   _size: {x: 20, y: 20}
   _center: {x: 11.5, y: 13.16}
   _loadDistance: 5
   _minorLoadDistance: 1
-  _maxCalculateCount: 1000000
+  _maxCalculateCount: 100000
   _tensorFields:
-  - {fileID: 11400000, guid: 341958bdd26d61c458bb1b312b4b5f49, type: 2}
-  - {fileID: 11400000, guid: cd077f42fc097d84c85787df7ebeba41, type: 2}
-  - {fileID: 11400000, guid: 98adda347042320438070ee5cbd7b283, type: 2}
-  ObjectPoolData:
+  - {fileID: 11400000, guid: 1b8578d51e15b534fb4fa0c7bf7a36e7, type: 2}
+  _objectPoolData:
   - {fileID: 11400000, guid: ba3754fa7de24d742ae5e10f71bfc4ee, type: 2}
   _mainStreamline: {fileID: 157079611}
-  _polygonMaterial: {fileID: 2100000, guid: 3f532fd3bc3865a47b05fffc3fe2b8f7, type: 2}
-  _buildingMaterial: {fileID: 2100000, guid: 96f7e70463ed9424690fcf868823155c, type: 2}
+  _polygonMaterial: {fileID: 2100000, guid: 1840c20d50626ce4ab8618ff839493c5, type: 2}
+  _buildingMaterial: {fileID: 2100000, guid: 3f532fd3bc3865a47b05fffc3fe2b8f7, type: 2}
   _minorStreamline: {fileID: 227936917}
-  _buildingMaterials:
-  - {fileID: 2100000, guid: 237d4212a23afc24ea6c6a6efd1d1ba3, type: 2}
-  - {fileID: 2100000, guid: f99d4edb70a582d4482b1b99656d2db3, type: 2}
-  - {fileID: 2100000, guid: cec47bea6ee2371498a6bc671a89ff21, type: 2}
-  - {fileID: 2100000, guid: 96f7e70463ed9424690fcf868823155c, type: 2}
+  _buildingMaterials: []
+  _isGenerateBuilding: 0

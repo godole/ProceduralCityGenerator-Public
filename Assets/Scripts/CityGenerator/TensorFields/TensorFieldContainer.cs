@@ -36,7 +36,7 @@ public class TensorFieldContainer
         
         _tensorField.CalculateEigen();
 
-        return (isMajor ? _tensorField.MajorEigenVector : _tensorField.MinorEigenVector) ;;
+        return isMajor ? _tensorField.MajorEigenVector : _tensorField.MinorEigenVector;
     }
 
     public Vector3 GetTensorSampling(Vector3 pos, Vector3 prevDir, bool isMajor)

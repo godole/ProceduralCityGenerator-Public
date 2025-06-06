@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Utility;
 
 namespace CityGenerator.TensorFields
 {
@@ -20,7 +21,7 @@ namespace CityGenerator.TensorFields
             {
                 Vector3 dir = (Positions[i + 1] - Positions[i]).normalized;
                 
-                var angleAxis = Mathf.Atan2(dir.z, dir.x) * Mathf.Rad2Deg;
+                var angleAxis = Mathf.Acos(Vector3.Dot(dir, Vector3.right));
                 float rCos2Theta = Mathf.Cos(2.0f * angleAxis);
                 float rSin2Theta = Mathf.Sin(2.0f * angleAxis);
                 

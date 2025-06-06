@@ -23,12 +23,15 @@ namespace CityGenerator
         [SerializeField] private List<TensorFieldData> _tensorFields;
 
         [Header("Visualizer Data")] 
-        [SerializeField] private List<ObjectPoolData> ObjectPoolData;
+        [SerializeField] private List<ObjectPoolData> _objectPoolData;
         [SerializeField] private LineRenderer _mainStreamline;
         [SerializeField] private Material _polygonMaterial;
         [SerializeField] private Material _buildingMaterial;
         [SerializeField] private LineRenderer _minorStreamline;
         [SerializeField] private List<Material> _buildingMaterials;
+
+        [Header("Test Options")] [SerializeField]
+        private bool _isGenerateBuilding;
         
         private TensorFieldContainer _tensorFieldContainer;
         private readonly List<Streamline.Vertex> _seedPoints = new();
@@ -38,13 +41,13 @@ namespace CityGenerator
         private int _maxCalculateCountInternal;
         private int _buildingIndex;
         
-        private GameObject buildingObjectParent;
+        private GameObject _buildingObjectParent;
     
         private void Start()
         {
-            buildingObjectParent = new GameObject("BuildingObjectParent");
+            _buildingObjectParent = new GameObject("BuildingObjectParent");
 
-            foreach (ObjectPoolData objectPoolData in ObjectPoolData)
+            foreach (ObjectPoolData objectPoolData in _objectPoolData)
             {
                 ObjectPoolContainer.Instance.InitWithPoolData(objectPoolData);    
             }
@@ -61,6 +64,15 @@ namespace CityGenerator
             foreach (var tensorField in _tensorFields)
             {
                 _tensorFieldContainer.AddTensorField(tensorField);
+                if (tensorField is LineTensorField line)
+                {
+                    foreach (Vector3 linePosition in line.Positions)
+                    {
+                        var primitive = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        primitive.transform.position = linePosition * 100.0f;
+                        primitive.transform.localScale = Vector3.one * 50.0f;
+                    }
+                }
             }
         
             _seedPoints.Add(new Streamline.Vertex(new Vector3(_center.x + _loadDistance, 0.0f, _center.y + _loadDistance), true));
@@ -119,6 +131,9 @@ namespace CityGenerator
                 connectionInfo.Add(vertex);
                 vertices.Add(vertex.Index, vertex);
             }
+
+            if (!_isGenerateBuilding)
+                return;
 
             var polygons = PolygonSplit.GetSplitPolygons(connectionInfo);
 
@@ -228,7 +243,7 @@ namespace CityGenerator
                     var buildingObject = TestUtil.CreateBuildingObject(_buildingMaterials[i % _buildingMaterials.Count], shrinkPolygon, UnityEngine.Random.Range(10.0f, 70.0f));
                     if (!string.IsNullOrEmpty(groupName))
                     {
-                        buildingObject.transform.SetParent(buildingObjectParent.transform);
+                        buildingObject.transform.SetParent(_buildingObjectParent.transform);
                     }
                 
                     buildingObject.name = $"{_buildingIndex}";
