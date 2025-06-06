@@ -164,6 +164,12 @@ namespace ProceduralBuildingGenerator
                         _isPrimitive = true;
                         _primitivePool = ObjectPoolContainer.Instance.GetPool(rule.Argument);
                         break;
+                    
+                    case "Fill" :
+                        CreateChildContext(new Vector3(0.0f, scalableMaxY, 0.0f),
+                            new Vector2(Size.x, Size.y), Quaternion.identity, rule);
+                        _useLocalScale = true;
+                        break;
                 }
             }
 
